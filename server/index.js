@@ -1,9 +1,16 @@
+require('dotenv').config()
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt-edge')
 const app = express()
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
+
+const server = require('http').createServer(app)
+const io = require('socket.io')(server, {
+  path: '/io'
+})
+require('./socket')(io)
 
 app.set('port', port)
 
@@ -25,7 +32,7 @@ async function start() {
   app.use(nuxt.render)
 
   // Listen the server
-  app.listen(port, host)
+  server.listen(port, host)
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true

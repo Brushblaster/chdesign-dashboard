@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import colors from 'vuetify/es5/util/colors'
+import LRU from 'lru-cache'
+
+const themeChache = LRU({
+  max: 10,
+  maxAge: 1000 * 60 * 60
+})
 
 Vue.use(Vuetify, {
   theme: {
@@ -11,5 +17,8 @@ Vue.use(Vuetify, {
     warning: colors.amber.base,
     error: colors.deepOrange.accent4,
     success: colors.green.accent3
+  },
+  options: {
+    themeChache
   }
 })
