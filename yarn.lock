@@ -2790,7 +2790,7 @@ eslint-visitor-keys@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#3f3180fb2e291017716acb4c9d6d5b5c34a6a81d"
 
-eslint@^5.0.1:
+eslint@^5.6.1:
   version "5.6.1"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-5.6.1.tgz#348134e32ccc09abb2df1bf282b3f6eed8c7b480"
   dependencies:
@@ -4674,8 +4674,8 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
 nuxt-edge@^2.1.0-25638752.fdb225f:
-  version "2.1.0-25638752.fdb225f"
-  resolved "https://registry.yarnpkg.com/nuxt-edge/-/nuxt-edge-2.1.0-25638752.fdb225f.tgz#3004f73c9f35b0413b96988364e60baf74e68736"
+  version "2.1.0-25640468.12db681"
+  resolved "https://registry.yarnpkg.com/nuxt-edge/-/nuxt-edge-2.1.0-25640468.12db681.tgz#096407945b81fa894dd270214c46f773f9f3dc6a"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/polyfill" "^7.0.0"
