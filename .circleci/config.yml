@@ -1,0 +1,51 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:9.8.0
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - run: yarn install
+      - run: yarn build
+      - run: >
+              docker build
+              --build-arg NODE_ENV="production"
+              --build-arg MONGODB_USER="$MONGODB_USER"
+              --build-arg MONGODB_PASS="$MONGODB_PASS"
+              --build-arg MONGODB_ADDRESS_PROD="$MONGODB_ADDRESS_PROD"
+              --build-arg AUTH0_CLIENT_ID="$AUTH0_CLIENT_ID"
+              --build-arg AUTH0_CLIENT_DOMAIN="$AUTH0_CLIENT_DOMAIN"
+              --build-arg PROD_DOMAIN="$PROD_DOMAIN"
+              --build-arg DEVE_DOMAIN="$DEVE_DOMAIN"
+              --build-arg PORT="$PORT"
+              --build-arg HOST="$HOST"
+              -t brushblaster/chdesign:v0.0.1 .
+      - run: docker run -d -p 127.0.0.1:80:3000 brushblaster/chdesign:v0.0.1
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: yarn test

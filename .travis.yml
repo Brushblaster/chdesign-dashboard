@@ -1,0 +1,62 @@
+sudo: required
+
+services:
+  - docker
+
+language: node_js
+node_js:
+  - "9.8.0"
+
+cache:
+  - yarn
+  - bundler
+
+apt addons: true
+
+cache components: true
+
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+install:
+  - yarn install
+  - yarn build
+  - >
+      docker build
+      --build-arg NODE_ENV="production"
+      --build-arg MONGODB_USER="$MONGODB_USER"
+      --build-arg MONGODB_PASS="$MONGODB_PASS"
+      --build-arg MONGODB_ADDRESS_PROD="$MONGODB_ADDRESS_PROD"
+      --build-arg AUTH0_CLIENT_ID="$AUTH0_CLIENT_ID"
+      --build-arg AUTH0_CLIENT_DOMAIN="$AUTH0_CLIENT_DOMAIN"
+      --build-arg PROD_DOMAIN="$PROD_DOMAIN"
+      --build-arg DEVE_DOMAIN="$DEVE_DOMAIN"
+      --build-arg PORT="$PORT"
+      --build-arg HOST="$HOST"
+      -t brushblaster/chdesign-dashboard:v0.0.1 .
+  - docker run -d -p 127.0.0.1:80:3000 brushblaster/chdesign-dashboard:v0.0.1
+
+before_script: true
+
+script: true
+
+before_cache: true
+
+after_success:
+  - echo finisched build
+
+after_failed:
+  - echo failed build
+
+deploy.skip_cleanup: true
+
+deploy:
+  provider: script
+  script: bash docker_push.sh
+  on:
+    branch: master
+
+
+after_script: true
+
+skip_cleanup: true
