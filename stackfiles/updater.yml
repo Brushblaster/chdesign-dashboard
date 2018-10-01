@@ -1,0 +1,23 @@
+version: "3.6"
+services:
+  watchtower:
+    image: v2tec/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: 
+      --interval 120
+      --cleanup
+      --debug
+    networks:
+      - cluster
+      - web
+    deploy:
+      mode: global
+ 
+
+networks:
+  web:
+    external: true
+  cluster:
+    external: true

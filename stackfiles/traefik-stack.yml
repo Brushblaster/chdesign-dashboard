@@ -1,0 +1,157 @@
+version: '3.6'
+
+services:
+  portainer:
+    image: portainer/portainer:latest
+    command: --host=unix:///var/run/docker.sock
+    networks:
+      - cluster
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/portainer/data:/data
+    ports:
+      - 9000:9000
+    deploy:
+      labels:
+        traefik.frontend.rule: "Host: manage.ch-design.ch"
+        traefik.backend: "portainer"
+        traefik.docker.network: "cluster"
+        traefik.port: "9000"
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+    depends_on:
+      - traefik
+
+  agent:
+    image: portainer/agent
+    environment:
+      # REQUIRED: Should be equal to the service name prefixed by "tasks." when
+      # deployed inside an overlay network
+      AGENT_CLUSTER_ADDR: tasks.agent
+      AGENT_PORT: 9001
+      LOG_LEVEL: debug
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/portainer/agentData/:/data
+    networks:
+      - cluster
+      - web
+    deploy:
+      mode: global
+
+
+  traefik:
+    image: traefik:latest
+    command:
+      --docker
+      --docker.swarmmode
+      --docker.watch
+      --docker.domain=ch-design.ch
+      --logLevel=DEBUG
+      --api
+#      --traefikLog.filePath="/usr/traefik/traefik.log"
+#      --traefikLog.format="json"
+#      --accessLog.filePath="/usr/traefik/access.log"
+#      --accessLog.format="json"
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - web
+      - cluster
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/chdesign/traefik/traefik.toml:/traefik.toml
+      - /usr/chdesign/traefik/acme.json:/acme.json
+      - /usr/chdesign/traefik:/usr/traefik
+    deploy:
+      labels:
+        - 'traefik.frontend.rule=Host:loadbalancer.ch-design.ch'
+        - 'traefik.port=8080'
+        - 'traefik.docker.network=web'
+        - 'traefik.backend=traefik'
+# Basic Auth needs to have $$ instead of $
+        - 'traefik.frontend.auth.basic=admin:$$apr1$$Hel8hVFl$$gR3sp2Kkis58wjoE2n6T70'
+      mode: global
+      update_config:
+        parallelism: 1
+        delay: 30s
+        failure_action: rollback
+        order: start-first
+      restart_policy:
+        condition: any
+        delay: 5s
+#        max_attempts: 5
+#        window: 120s
+      placement:
+        constraints:
+          - node.role == manager
+
+
+
+
+  app:
+    image: brushblaster/chdesign:v0.0.1
+    networks:
+      - cluster
+
+    deploy:
+      labels:
+        traefik.frontend.rule: "Host: dev.ch-design.ch"
+        traefik.port: "3000"
+        traefik.frontend.entryPoints: "http,https"
+        traefik.enable: "true"
+        traefik.docker.network: "cluster"
+        traefik.backend: "express"
+        traefik.backend.loadbalancer.stickiness: "true"
+        traefik.backend.loadbalancer.stickiness.cookieName: "LB_TRAEFIK"
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+    depends_on:
+      - traefik
+      - portainer
+      - mongo
+
+
+  mongo:
+    image: mongo
+    command:
+      --bind_ip_all
+    networks:
+      - cluster
+      - web
+    ports:
+      - 27017:27017
+    volumes:
+      - /usr/mongo:/data/db
+    deploy:
+      labels:
+        traefik.frontend.rule: "Host: test.ch-design.ch"
+        traefik.port: "27017"
+        traefik.backend: "mongo"
+      placement:
+        constraints:
+         - node.role == manager
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+
+networks:
+  web:
+    external: true
+  cluster:
+    external: true
+  agent_network:
+    driver: overlay
+
+volumes:
+    portainer_data:
+
+
