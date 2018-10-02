@@ -92,8 +92,8 @@ module.exports = {
   },
 
   env: {
-    PROD_DOMAIN: process.env.PROD_DOMAIN,
-    NODE_ENV: process.env.NODE_ENV
+    PROD_DOMAIN: process.env.PROD_DOMAIN//,
+    // NODE_ENV: process.env.NODE_ENV
   },
 
   watch: ['db'],
