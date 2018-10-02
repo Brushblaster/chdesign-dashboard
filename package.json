@@ -1,7 +1,7 @@
 {
-  "name": "chdesign-ashboard",
+  "name": "chdesign-dashboard",
   "version": "1.0.0",
-  "description": "Buiseness Dashboard",
+  "description": "CH-Design GmbH Business Dashboard",
   "author": "Denis Käch",
   "private": true,
   "scripts": {
