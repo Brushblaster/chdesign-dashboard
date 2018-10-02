@@ -1,6 +1,26 @@
 <template>
   <v-content>
-    You neet to Login.
+    <v-container
+      fluid
+      fill-height>
+      <v-layout
+        v-bind="binding"
+        row
+        align-start
+        justify-center
+      >
+        <v-flex xs12>
+          <v-card>
+            <v-card-title class="display-1 font-weight-thin">
+              Dashboard
+            </v-card-title>
+            <v-btn :to="'kundenverwaltung'">
+              Kundenverwaltung
+            </v-btn>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-content>
 </template>
 

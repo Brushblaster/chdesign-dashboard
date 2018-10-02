@@ -1,86 +1,103 @@
 <template>
-  <v-app dark>
+  <v-app id="app" light>
     <v-navigation-drawer
-      :mini-variant="miniVariant"
-      :clipped="clipped"
+      dark
       v-model="drawer"
-      fixed
       app
+      clipped
+      temporary
+      color="teal darken-1"
+      disable-resize-watcher
     >
+    <v-toolbar
+    class="white--text"
+    dark
+    color="teal darken-3"
+    height="50px"
+    >
+    <v-spacer />
+    <v-btn icon @click="drawer = !drawer">
+      <v-icon>arrow_back</v-icon>
+    </v-btn>
+    </v-toolbar>
       <v-list>
         <v-list-tile
-          v-for="(item, i) in items"
+          router
           :to="item.to"
           :key="i"
-          router
+          v-for="(item, i) in items"
           exact
+          :disabled="item.disable"
         >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon" />
+          <v-list-tile-action >
+            <v-icon v-html="item.icon"></v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="item.title" />
+            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+      <v-divider v-if="this.$auth.loggedIn"/>
+      <v-list v-if="this.$auth.loggedIn">
+        <v-list-tile
+          router
+          :to="item.to"
+          :key="i"
+          v-for="(item, i) in hiddenItems"
+          exact
+          :disabled="item.disable"
+        >
+          <v-list-tile-action >
+            <v-icon v-html="item.icon"></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title v-text="item.title"></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-toolbar-side-icon @click="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'" />
+    dark
+    app
+    scroll-off-screen
+    :scroll-threshold=treshold
+    color="teal darken-3"
+    height=50>
+      <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-spacer />
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn
+        v-for="(item, i) in items"
+        :key="i"
+        router
+        :to="item.to"
+        flat
+        small
+        class="white--text"
+        :disabled="item.disable"
+        >
+          <v-icon size="18px" class="white--text pr-2">
+            {{ item.icon }}
+          </v-icon>
+          {{ item.title }}
+        </v-btn>
+      </v-toolbar-items>
+      <v-spacer />
+      <v-btn v-if="this.$auth.loggedIn" flat @click="logoutUser">
+        <v-icon>lock_open</v-icon>
       </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"/>
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>menu</v-icon>
+      <v-btn v-else flat @click="loginUser">
+        <v-icon>lock</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-content>
-      <v-container>
+    <!-- <v-content> -->
+      <!-- <v-container fluid app> -->
         <nuxt />
-      </v-container>
-    </v-content>
-    <v-navigation-drawer
-      :right="right"
-      v-model="rightDrawer"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-tile @click.native="right = !right">
-          <v-list-tile-action>
-            <v-icon light>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
-      <span>&copy; 2017</span>
+      <!-- </v-container> -->
+    <!-- </v-content> -->
+    <v-footer fixed app>
+      <span class="pl-2">&copy; 2018 / Denis Käch</span>
     </v-footer>
   </v-app>
 </template>
@@ -90,17 +107,83 @@ export default {
   data() {
     return {
       clipped: false,
-      drawer: true,
+      drawer: false,
       fixed: false,
       items: [
-        { icon: 'apps', title: 'Welcome', to: '/' },
-        { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
+        { icon: 'fas fa-home', title: 'Home', to: '/', disable: false },
+        {
+          icon: 'fas fa-ribbon',
+          title: 'Fasnacht',
+          to: '/fasnacht',
+          disable: false
+        },
+        {
+          icon: 'fas fa-boxes',
+          title: 'Nähkurse',
+          to: '/naehkurse',
+          disable: false
+        },
+        {
+          icon: 'fas fa-child',
+          title: 'Über Mich',
+          to: '/about',
+          disable: false
+        },
+        {
+          icon: 'fas fa-images',
+          title: 'Bilder Gallerie',
+          to: '/gallery',
+          disable: false
+        }
       ],
-      miniVariant: false,
-      right: true,
+      hiddenItems: [
+        {
+          icon: 'fas fa-lock',
+          title: 'Dashboard',
+          to: '/dashboard',
+          disable: !this.$store.state.auth.loggedIn
+        },
+        {
+          icon: 'fas fa-home',
+          title: 'Kundenverwaltung',
+          to: '/dashboard/kundenverwaltung',
+          disable: !this.$store.state.auth.loggedIn
+        },
+        {
+          icon: 'fas fa-ribbon',
+          title: 'Kursverwaltung',
+          to: '/dashboard/kursverwaltung',
+          disable: !this.$store.state.auth.loggedIn
+        },
+        {
+          icon: 'fas fa-boxes',
+          title: 'Auftragsverwaltung',
+          to: '/dashboard/auftragsverwaltung',
+          disable: !this.$store.state.auth.loggedIn
+        }
+      ],
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'CH-Design GmbH Dev',
+      treshold: 50
+    }
+  },
+  methods: {
+    logoutUser() {
+      this.$auth.logout()
+    },
+    loginUser() {
+      this.$auth.loginWith('auth0')
+    },
+    hideDashboard() {
+      if (this.$auth.loggedIn) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 }
 </script>
+
+<style lang="stylus">
+</style>
