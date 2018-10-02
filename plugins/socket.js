@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueSocketIo from 'vue-socket.io'
 import io from 'socket.io-client'
 
-let prodHost = `https://${process.env.PROD_DOMAIN}`
+let prodHost = `https://app.${process.env.PROD_DOMAIN}`
 
 Vue.use(
   VueSocketIo,
