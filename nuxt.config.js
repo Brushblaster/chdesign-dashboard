@@ -88,13 +88,14 @@ module.exports = {
         redirect_uri:
           process.env.NODE_ENV === 'production'
             ? `http://${process.env.HOST}:${process.env.PORT}/`
-            : 'https://dev.ch-design.ch/'
+            : 'https://app.ch-design.ch/'
       }
     }
   },
 
   env: {
-    PROD_DOMAIN: process.env.PROD_DOMAIN
+    PROD_DOMAIN: process.env.PROD_DOMAIN,
+    NODE_ENV: process.env.NODE_ENV
   },
 
   watch: ['db'],
