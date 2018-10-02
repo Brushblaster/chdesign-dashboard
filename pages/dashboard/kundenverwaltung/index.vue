@@ -17,6 +17,12 @@
             :dialog="dialog"
             @submit="submitCustomer"
             />
+            <EditCustomerForm
+            :dialog="dialog"
+            @find="findCustomer"
+            @save="saveCustomer"
+            @delete="deleteCustomer"
+            />
           </v-card>
           <v-card>
             <v-card-title class="headline font-weight-thin">
@@ -34,10 +40,13 @@
 <script>
 import NewCustomerForm from '@/components/NewCustomerForm'
 import CustomerList from '@/components/CustomerList'
+import EditCustomerForm from '@/components/EditCustomerForm'
+
 export default {
   components: {
     NewCustomerForm,
-    CustomerList
+    CustomerList,
+    EditCustomerForm
   },
   data: () => ({
     dialog: false
@@ -64,20 +73,18 @@ export default {
     this.$forceUpdate()
   },
   methods: {
-    newCustomer() {
-      console.log('DB')
-      this.$socket.emit('createCustomer', {
-        preName: 'Hans',
-        surName: 'Muster',
-        street: 'Musterstrasse',
-        streetNr: 4,
-        city: 'Musterhausen',
-        zipCode: 4563
-      })
-    },
     submitCustomer(formData) {
       this.$socket.emit('setNewCustomer', formData)
       console.log('Data in parent compontent :', formData)
+    },
+    findCustomer(formData) {
+      this.$socket.emit('findCustomer', formData)
+    },
+    saveCustomer(formdata) {
+      this.$socket.emit('saveCustomer', formData)
+    },
+    deleteCustomer(formdata) {
+      this.$socket.emit('deleteCustomer', formdata)
     }
   }
 }

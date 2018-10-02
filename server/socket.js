@@ -9,34 +9,7 @@ const db = require('../db')
 exports = module.exports = function(io) {
   io.sockets.on('connection', function(socket) {
     socket.emit('handshake', 'Handshake from server')
-    /* socket.on('saveConfig', function (config) {
-      db.CommConf.create(config)
-        .then(CommConf => console.log(CommConf))
-        .catch(error => console.log('Model Error: ', error))
-    })
-    socket.on('getLastConfig', function () {
-      db.CommConf
-        .find({
-          config: 1
-        }).limit(1)
-        .where('config').ne(null)
-        .sort('-createdOn')
-        .then(CommConf => {
-          console.log(CommConf)
-          io.sockets.emit('getLastConfig_res', (CommConf[0]))
-        })
-        .catch(error => console.log(error))
-    }) */
     console.log('socket is connected !')
-    socket.on('createCustomer', function(customer) {
-      console.log('fired')
-      db.CustomerDB.create(customer)
-        .then(CustomerDB => {
-          console.log(CustomerDB)
-          io.sockets.emit('createCustomer_res', CustomerDB)
-        })
-        .catch(error => console.log(error))
-    })
 
     socket.on('setNewCustomer', function(customer) {
       console.log('fired')
@@ -55,6 +28,35 @@ exports = module.exports = function(io) {
           io.sockets.emit('refreshAllCustomers_res', CustomerDB)
         })
         .catch(error => console.log('DB Model Err: ', error))
+    })
+
+    socket.on('findCustomer', function(customer) {
+      console.log(customer)
+      db.CustomerDB.find({
+        $or: [
+          {
+            preName: customer
+          },
+          {
+            surName: customer
+          }
+        ]
+      })
+        .then(customer => {
+          console.log(customer)
+          io.sockets.emit('findCustomer_res', customer)
+        })
+        .catch(error => console.log('could not finde Customer :', error))
+    }),
+
+    socket.on('deleteCustomer', function(customer) {
+      console.log('to delete: ', customer)
+      db.CustomerDB.findByIdAndDelete({_id: customer._id})
+        .then(customer => {
+          console.log('delete customer: ', customer)
+          io.sockets.emit('deleteCustomer_res', customer)
+        })
+        .catch(error => console.log('could not delete Customer :', error))
     })
   })
 }

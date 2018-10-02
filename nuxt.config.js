@@ -1,6 +1,7 @@
 require('dotenv').config()
 const pkg = require('./package')
 
+
 module.exports = {
   mode: 'universal',
 
@@ -56,7 +57,11 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [{ src: '@/plugins/vuetify' }, { src: '@/plugins/socket' }],
+  plugins: [
+    { src: '@/plugins/vuetify' },
+    { src: '@/plugins/socket' },
+    { src: '@/plugins/lodash' }
+  ],
 
   /*
   ** Nuxt.js modules
@@ -65,7 +70,8 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/component-cache'
   ],
   /*
   ** Axios module configuration
@@ -86,13 +92,16 @@ module.exports = {
       auth0: {
         client_id: process.env.AUTH0_CLIENT_ID,
         domain: process.env.AUTH0_CLIENT_DOMAIN,
-        redirect_uri: process.env.NODE_ENV === 'production' ? `http://app.${process.env.PROD_DOMAIN}` : `http://${process.env.HOST}:${process.env.PORT}/`
+        redirect_uri:
+          process.env.NODE_ENV === 'production'
+            ? `http://app.${process.env.PROD_DOMAIN}`
+            : `http://${process.env.HOST}:${process.env.PORT}/`
       }
     }
   },
 
   env: {
-    PROD_DOMAIN: process.env.PROD_DOMAIN//,
+    PROD_DOMAIN: process.env.PROD_DOMAIN //,
     // NODE_ENV: process.env.NODE_ENV
   },
 

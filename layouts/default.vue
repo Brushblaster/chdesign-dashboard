@@ -20,24 +20,6 @@
       <v-icon>arrow_back</v-icon>
     </v-btn>
     </v-toolbar>
-      <v-list>
-        <v-list-tile
-          router
-          :to="item.to"
-          :key="i"
-          v-for="(item, i) in items"
-          exact
-          :disabled="item.disable"
-        >
-          <v-list-tile-action >
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-      <v-divider v-if="this.$auth.loggedIn"/>
       <v-list v-if="this.$auth.loggedIn">
         <v-list-tile
           router
@@ -60,15 +42,15 @@
     dark
     app
     scroll-off-screen
-    :scroll-threshold=treshold
+    :scroll-threshold="treshold"
     color="teal darken-3"
-    height=50>
+    height="50">
       <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer />
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
-        v-for="(item, i) in items"
+        v-for="(item, i) in hiddenItems"
         :key="i"
         router
         :to="item.to"
@@ -109,33 +91,6 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
-        { icon: 'fas fa-home', title: 'Home', to: '/', disable: false },
-        {
-          icon: 'fas fa-ribbon',
-          title: 'Fasnacht',
-          to: '/fasnacht',
-          disable: false
-        },
-        {
-          icon: 'fas fa-boxes',
-          title: 'Nähkurse',
-          to: '/naehkurse',
-          disable: false
-        },
-        {
-          icon: 'fas fa-child',
-          title: 'Über Mich',
-          to: '/about',
-          disable: false
-        },
-        {
-          icon: 'fas fa-images',
-          title: 'Bilder Gallerie',
-          to: '/gallery',
-          disable: false
-        }
-      ],
       hiddenItems: [
         {
           icon: 'fas fa-lock',
@@ -163,7 +118,7 @@ export default {
         }
       ],
       rightDrawer: false,
-      title: 'CH-Design GmbH Dev',
+      title: 'CH-Design GmbH Dashboard',
       treshold: 50
     }
   },
@@ -173,13 +128,6 @@ export default {
     },
     loginUser() {
       this.$auth.loginWith('auth0')
-    },
-    hideDashboard() {
-      if (this.$auth.loggedIn) {
-        return true
-      } else {
-        return false
-      }
     }
   }
 }
