@@ -86,7 +86,7 @@ module.exports = {
       auth0: {
         client_id: process.env.AUTH0_CLIENT_ID,
         domain: process.env.AUTH0_CLIENT_DOMAIN,
-        redirect_uri: process.env.NODE_ENV === 'production' ? `http://${process.env.HOST}:${process.env.PORT}/` : `https://app.${process.env.PROD_DOMAIN}`
+        redirect_uri: process.env.NODE_ENV === 'production' ? `http://app.${process.env.PROD_DOMAIN}` : `http://${process.env.HOST}:${process.env.PORT}/`
       }
     }
   },
