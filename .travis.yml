@@ -7,6 +7,13 @@ language: node_js
 node_js:
   - "9.8.0"
 
+notifications:
+  email:
+    recipients:
+      - denis.kaech@gamil.com
+    on_success: always # default: change
+    on_failure: always # default: always
+
 cache:
   - yarn
   - bundler
