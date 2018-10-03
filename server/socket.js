@@ -33,15 +33,7 @@ exports = module.exports = function(io) {
     socket.on('findCustomer', function(customer) {
       console.log(customer)
       db.CustomerDB.find({
-        $or: [
-          {
-            preName: customer
-          },
-          {
-            surName: customer
-          }
-        ]
-      })
+        $or: [{preName:{$regex: customer, $options: 'i'},{surName: {$regex: customer, $options: 'i'}}]})
         .then(customer => {
           console.log(customer)
           io.sockets.emit('findCustomer_res', customer)
