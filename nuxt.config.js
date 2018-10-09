@@ -104,7 +104,13 @@ module.exports = {
     PROD_DOMAIN: process.env.PROD_DOMAIN //,
     // NODE_ENV: process.env.NODE_ENV
   },
-
+  
+  render: {
+    http2: {
+      push: true
+    }
+  },
+  
   watch: ['db'],
   /*
   ** Build configuration
