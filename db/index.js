@@ -4,8 +4,9 @@ const CustomerModel = require('./models/customers')
 
 const options = {
   useNewUrlParser: true,
-  server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
-  replset: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }
+  socketTimeoutMS: 0,
+  keepAlive: true,
+  reconnectTries: 30
 }
 
 let buildUpUri =
