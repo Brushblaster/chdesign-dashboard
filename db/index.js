@@ -21,7 +21,7 @@ const options = {
   process.env.MONGODB_ADDRESS_PROD +
   '/chdesign?authSource=admin' */
 
-let uri = buildUpUri
+// let uri = buildUpUri
 
 mongoose
   .connect(
