@@ -3,7 +3,9 @@ mongoose.Promise = global.Promise
 const CustomerModel = require('./models/customers')
 
 const options = {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
+  replset: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }
 }
 
 let buildUpUri =
