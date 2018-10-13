@@ -10,13 +10,13 @@ const themeChache = LRU({
 
 Vue.use(Vuetify, {
   theme: {
-    primary: '#1DE9B6',
-    secondary: '#4DB6AC',
-    accent: '#0097A7',
-    error: '#f44336',
-    warning: '#ffeb3b',
-    info: '#2196f3',
-    success: '#00C853'
+    primary: "#01888b",
+    secondary: "#2abfc5",
+    accent: "#e8dcc2",
+    error: "#f44336",
+    warning: "#ffeb3b",
+    info: "#2196f3",
+    success: "#00C853"
   },
   options: {
     themeChache

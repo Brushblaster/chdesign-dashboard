@@ -1,16 +1,9 @@
 <template>
-  <v-layout
-    row
-    align-content-start>
-    <v-dialog
-      v-model="dialog"
-      max-width="600px">
-      <v-btn
-        slot="activator"
-        class="align-left"
-        color="primary"
-        dark>
-        Neuer Kunde
+  <v-layout row align-content-start>
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-btn slot="activator" class="align-left" color="primary" dark>
+        <v-icon class="mr-2">person_add</v-icon>
+        Neuen Kunden anlegen
       </v-btn>
       <v-card>
         <v-card-title>
@@ -23,42 +16,16 @@
                 <v-text-field v-model="formData.preName" label="Vorname" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="formData.preName2" label="Zweiter Vorname" ></v-text-field>
+                <v-text-field v-model="formData.preName2" label="Zweiter Vorname"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field
-                  v-model="formData.surName"
-                  label="Nachname"
-                  required
-                ></v-text-field>
-              <v-flex xs12 sm6 md4>
-                <v-menu
-                ref="menu"
-                :close-on-content-click="false"
-                v-model="menu"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-                >
-                  <v-text-field
-                    slot="activator"
-                    v-model="formData.birthDate"
-                    label="Geburtsdatum"
-                    append-icon="event"
-                    readonly
-                  ></v-text-field>
-                  <v-date-picker
-                    ref="picker"
-                    v-model="formData.birthDate"
-                    :max="new Date().toISOString().substr(0, 10)"
-                    min="1950-01-01"
-                    @change="save"
-                  ></v-date-picker>
-                </v-menu>
-              </v-flex>
+                <v-text-field v-model="formData.surName" label="Nachname" required></v-text-field>
+                <v-flex xs12 sm6 md4>
+                  <v-menu ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
+                    <v-text-field slot="activator" v-model="formData.birthDate" label="Geburtsdatum" append-icon="event" readonly></v-text-field>
+                    <v-date-picker ref="picker" v-model="formData.birthDate" :max="new Date().toISOString().substr(0, 10)" min="1950-01-01" @change="save"></v-date-picker>
+                  </v-menu>
+                </v-flex>
               </v-flex>
               <v-flex xs12>
                 <v-text-field v-model="formData.email" append-icon="email" label="Email" required></v-text-field>
@@ -95,29 +62,29 @@
 
 <script>
 export default {
-  data() {
-    return {
-      dialog: false,
-      date: null,
-      menu: false,
-      formData: {}
-    }
-  },
-  watch: {
-    menu(val) {
-      val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
-    }
-  },
-  methods: {
-    save() {
-      this.$refs.menu.save(this.menu)
-    },
-    sumbit(event) {
-      this.$emit('submit', this.formData)
-      this.dialog = false
-      //console.log('gathered Form data: ', this.formData)
-    }
-  }
+	data() {
+		return {
+			dialog: false,
+			date: null,
+			menu: false,
+			formData: {}
+		}
+	},
+	watch: {
+		menu(val) {
+			val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
+		}
+	},
+	methods: {
+		save() {
+			this.$refs.menu.save(this.menu)
+		},
+		sumbit(event) {
+			this.$emit('submit', this.formData)
+			this.dialog = false
+			//console.log('gathered Form data: ', this.formData)
+		}
+	}
 }
 </script>
 
