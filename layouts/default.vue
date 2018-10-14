@@ -1,6 +1,6 @@
 <template>
   <v-app id="app" light>
-    <v-navigation-drawer dark v-model="drawer" app clipped temporary color="primary" disable-resize-watcher>
+    <v-navigation-drawer class="font-weight-light" width="250" dark v-model="drawer" app clipped :temporary="!this.$auth.loggedIn" color="primary" disable-resize-watcher>
       <v-toolbar class="white--text" dark color="primary" height="50px">
         <v-spacer />
         <v-btn icon @click="drawer = !drawer">
@@ -20,7 +20,9 @@
     </v-navigation-drawer>
     <v-toolbar dark app scroll-off-screen :scroll-threshold="treshold" color="primary" height="50">
       <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-toolbar-title to="'/'" style="cursor: pointer" v-text="title">
+
+      </v-toolbar-title>
       <v-spacer />
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn v-for="(item, i) in hiddenItems" :key="i" router :to="item.to" flat small class="white--text" :disabled="item.disable">
@@ -31,10 +33,10 @@
         </v-btn>
       </v-toolbar-items>
       <v-spacer />
-      <v-btn v-if="this.$auth.loggedIn" flat @click="logoutUser">
+      <v-btn v-if="this.$auth.loggedIn" flat @click="$auth.logout()">
         <v-icon>lock_open</v-icon>
       </v-btn>
-      <v-btn v-else flat @click="loginUser">
+      <v-btn v-else flat @click="$auth.loginWith('auth0')">
         <v-icon>lock</v-icon>
       </v-btn>
     </v-toolbar>
@@ -87,16 +89,10 @@ export default {
 			treshold: 50
 		}
 	},
-	methods: {
-		logoutUser() {
-			this.$auth.logout()
-		},
-		loginUser() {
-			this.$auth.loginWith('auth0')
-		}
-	}
+	methods: {}
 }
 </script>
 
-<style lang="stylus">
+<style scoped>
 </style>
+
