@@ -17,11 +17,11 @@ const CoursesSchema = new Schema({
     default: 1
   },
   StartDate: {
-    type: Date,
+    type: String,
     required: [true, 'Beginning Date is required']
   },
   EndDate: {
-    type: Date,
+    type: String,
     required: [true, 'Ending Date is required']
   },
   StartTime: {
@@ -43,13 +43,11 @@ const CoursesSchema = new Schema({
   },
   City: {
     type: String
-
-
   },
-  AttendeesFree: {
+  PlacesFree: {
     type: Number,
   },
-  AttendeesOccupied: {
+  PlacesAvail: {
     type: Number
   },
   TimeStamp: {

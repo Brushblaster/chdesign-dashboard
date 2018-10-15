@@ -27,6 +27,7 @@ module.exports = {
     'vue/html-self-closing': 0,
     'vue/order-in-components': 0,
     'vue/no-unused-vars': 0,
-    'prettier/prettier': 0
+    'prettier/prettier': 0,
+    'vue/require-valid-default-prop': 0
   }
 }

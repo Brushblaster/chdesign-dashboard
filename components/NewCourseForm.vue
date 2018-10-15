@@ -112,6 +112,12 @@ export default {
 			this.$socket.emit('setNewCourse', this.Course)
 			this.dialog = false
 		}
+	},
+	sockets: {
+		editCourse_res(course) {
+			console.log(course)
+			this.Course = course
+		}
 	}
 }
 </script>

@@ -1,0 +1,125 @@
+<template>
+  <v-content>
+    <v-container grid-list-xs>
+      <v-layout align-center justify-center row wrap>
+        <v-flex xs11>
+          <v-card>
+            <v-card-title class="display-2 font-weight-thin" primary-title>
+              Kursverwaltung
+            </v-card-title>
+            <v-flex offset-xs11 xs1>
+              <div>
+                <v-speed-dial open-on-hover v-model="fab" top right direction="bottom">
+                  <v-btn slot="activator" v-model="fab" color="blue darken-2" dark fab>
+                    <v-icon>list</v-icon>
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                  <v-btn @click="refresh" fab dark small color="red">
+                    <v-icon>cached</v-icon>
+                  </v-btn>
+                  <v-btn @click="NewForm = !NewForm" fab dark small color="indigo">
+                    <v-icon>add</v-icon>
+                  </v-btn>
+                  <v-btn fab dark small color="green">
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                  <v-btn fab dark small color="red">
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                </v-speed-dial>
+              </div>
+            </v-flex>
+          </v-card>
+        </v-flex>
+        <v-flex xs11>
+          <v-data-table :headers="headers" :items="courses" hide-actions :loading="loading" class="elevation-1">
+            <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+            <template slot="items" slot-scope="props">
+              <tr :active="props.selected" @click="props.selected = !props.selected">
+                <td>
+                  <v-checkbox :input-value="props.selected" primary hide-details></v-checkbox>
+                </td>
+                <td class="text-xs-left">{{ props.item.CourseNumber }}</td>
+                <td class="text-xs-left">{{ props.item.CourseName }}</td>
+                <td class="text-xs-left">{{ props.item.StartDate }}</td>
+                <td class="text-xs-left">{{ props.item.EndDate }}</td>
+                <td class="text-xs-left">{{ props.item.StartTime }}</td>
+                <td class="text-xs-left">{{ props.item.EndTime }}</td>
+                <td class="text-xs-left">{{ props.item.City }}</td>
+                <td class="text-xs-left">{{ props.item.PlacesAvail }}</td>
+                <td class="text-xs-left">{{ props.item.PlacesFree }}</td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <NewCourseForm @submit="SubmitCourse" :show="NewForm" />
+  </v-content>
+</template>
+
+<script>
+import NewCourseForm from '@/components/NewCourseForm'
+export default {
+	components: {
+		NewCourseForm
+	},
+	data: () => ({
+		fab: null,
+		NewForm: false,
+		tuggle: false,
+		loading: false,
+		toggleAll: false,
+		headers: [
+			{ text: 'Kursnummer', align: 'left', value: 'CourseNumber' },
+			{ text: 'Kursname', align: 'left', value: 'CourseName' },
+			{ text: 'Start Datum', align: 'left', value: 'StartDate' },
+			{ text: 'End Datum', value: 'EndDate' },
+			{ text: 'Start Zeit', value: 'StartTime' },
+			{ text: 'End Zeit', value: 'EndTime' },
+			{ text: 'Ort', value: 'Location' },
+			{ text: 'Anzahl Teilnehmer', value: 'PlacesFree' },
+			{ text: 'Freie Plätze', value: 'PlacesAvail' }
+		],
+		courses: []
+	}),
+	computed: {},
+	sockets: {
+		setNewCourse_res(courses) {
+			this.refresh()
+		},
+		findCourses_res() {
+			// this.refreshingData()
+		},
+		refreshAllCourses_res(courses) {
+			console.log(courses)
+			this.loading = false
+			this.courses = courses
+		}
+	},
+	methods: {
+		refresh() {
+			this.loading = true
+			this.$socket.emit('refreshAllCourses')
+		},
+		SubmitCourse(course) {
+			console.log('rec')
+			this.$socket.emit('setNewCourse', course)
+		}
+	}
+}
+</script>
+
+<style scoped>
+#create .v-speed-dial {
+	position: absolute;
+}
+
+#create .v-btn--floating {
+	position: relative;
+}
+
+.v-overlay:before {
+	backdrop-filter: blur(3px);
+}
+</style>

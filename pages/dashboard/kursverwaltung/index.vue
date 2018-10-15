@@ -7,47 +7,40 @@
             <v-card-title class="display-2 font-weight-thin" primary-title>
               Kursverwaltung
             </v-card-title>
-            <v-flex offset-xs11 xs1>
-              <div>
-                <v-speed-dial open-on-hover v-model="fab" top right direction="bottom">
-                  <v-btn slot="activator" v-model="fab" color="blue darken-2" dark fab>
-                    <v-icon>list</v-icon>
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                  <v-btn @click="refresh" fab dark small color="red">
-                    <v-icon>cached</v-icon>
-                  </v-btn>
-                  <v-btn @click="NewForm = !NewForm" fab dark small color="indigo">
-                    <v-icon>add</v-icon>
-                  </v-btn>
-                  <v-btn fab dark small color="green">
-                    <v-icon>edit</v-icon>
-                  </v-btn>
-                  <v-btn fab dark small color="red">
-                    <v-icon>delete</v-icon>
-                  </v-btn>
-                </v-speed-dial>
-              </div>
-            </v-flex>
+            <div>
+              <v-toolbar flat color="white">
+                <v-btn @click="NewForm = !NewForm" color="primary" dark class="mb-2">Neuer Kurs</v-btn>
+                <v-divider class="mx-2" inset vertical></v-divider>
+                <v-btn @click="refresh" small fab color="primary" dark class="mb-2">
+                  <v-icon>cached</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <v-data-table :headers="headers" :items="courses" hide-actions class="elevation-1">
+                <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+                <template slot="items" slot-scope="props">
+                  <td class="text-xs-left">{{ props.item.CourseNumber }}</td>
+                  <td class="text-xs-left">{{ props.item.CourseName }}</td>
+                  <td class="text-xs-left">{{ props.item.StartDate }}</td>
+                  <td class="text-xs-left">{{ props.item.EndDate }}</td>
+                  <td class="text-xs-left">{{ props.item.StartTime }}</td>
+                  <td class="text-xs-left">{{ props.item.EndTime }}</td>
+                  <td class="text-xs-left">{{ props.item.City }}</td>
+                  <td class="text-xs-left">{{ props.item.PlacesAvail }}</td>
+                  <td class="text-xs-left">{{ props.item.PlacesFree }}</td>
+                  <v-icon small class="mr-2" @click="editItem(props.item)">
+                    edit
+                  </v-icon>
+                  <v-icon small @click="deleteItem(props.item)">
+                    delete
+                  </v-icon>
+                </template>
+              </v-data-table>
+            </div>
           </v-card>
-        </v-flex>
-        <v-flex xs11>
-          <v-data-table :headers="headers" :items="courses" hide-actions :loading="loading" class="elevation-1">
-            <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
-            <template slot="items" slot-scope="props">
-              <td class="text-xs-left">{{ props.item.CourseNumber }}</td>
-              <td class="text-xs-left">{{ props.item.CourseName }}</td>
-              <td class="text-xs-left">{{ props.item.StartDate }}</td>
-              <td class="text-xs-left">{{ props.item.EndDate }}</td>
-              <td class="text-xs-left">{{ props.item.StartTime }}</td>
-              <td class="text-xs-left">{{ props.item.EndTime }}</td>
-              <td class="text-xs-left">{{ props.item.City }}</td>
-            </template>
-          </v-data-table>
         </v-flex>
       </v-layout>
     </v-container>
-    <NewCourseForm @submit="SubmitCourse" :show="NewForm" />
+    <NewCourseForm :courses="courses" :show="NewForm" />
   </v-content>
 </template>
 
@@ -62,31 +55,39 @@ export default {
 		NewForm: false,
 		tuggle: false,
 		loading: false,
+		toggleAll: false,
 		headers: [
-			{ text: 'Kursnummer', align: 'left', value: 'CourseNumber' },
+			{ text: 'KursNr.', align: 'left', value: 'CourseNumber' },
 			{ text: 'Kursname', align: 'left', value: 'CourseName' },
 			{ text: 'Start Datum', align: 'left', value: 'StartDate' },
 			{ text: 'End Datum', value: 'EndDate' },
 			{ text: 'Start Zeit', value: 'StartTime' },
 			{ text: 'End Zeit', value: 'EndTime' },
 			{ text: 'Ort', value: 'Location' },
-			{ text: 'Anzahl Teilnehmer', value: 'city' },
-			{ text: 'Freie Plätze', value: 'birthday' }
+			{ text: 'Anzahl Teilnehmer', value: 'PlacesFree' },
+			{ text: 'Freie Plätze', value: 'PlacesAvail' }
 		],
 		courses: []
 	}),
+	mounted() {
+		this.refresh()
+	},
 	computed: {},
 	sockets: {
 		setNewCourse_res(courses) {
 			this.refresh()
 		},
 		findCourses_res() {
-			// this.refreshingData()
+			this.refresh()
 		},
 		refreshAllCourses_res(courses) {
 			console.log(courses)
 			this.loading = false
 			this.courses = courses
+		},
+		deleteCourse_res(courses) {
+			console.log('deleted: ', courses)
+			this.refresh()
 		}
 	},
 	methods: {
@@ -94,9 +95,20 @@ export default {
 			this.loading = true
 			this.$socket.emit('refreshAllCourses')
 		},
-		SubmitCourse(course) {
-			console.log('rec')
-			this.$socket.emit('setNewCourse', course)
+		editItem(item) {
+			const index = this.courses.indexOf(item)
+			let id = this.courses[index]._id
+			console.log(id)
+			// this.editedItem = Object.assign({}, item)
+			this.$socket.emit('editCourse', id)
+			this.NewForm = !this.NewForm
+		},
+
+		deleteItem(item) {
+			const index = this.courses.indexOf(item)
+			let id = this.courses[index]._id
+			this.$socket.emit('deleteCourse', id)
+			this.courses.splice(index, 1)
 		}
 	}
 }

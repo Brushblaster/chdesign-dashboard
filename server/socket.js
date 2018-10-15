@@ -6,12 +6,9 @@ const io = require('socket.io')({
 }) */
 const db = require('../db')
 
-
-
 // ==========================================================
 // Initialize conncetion between front and backend
 // ==========================================================
-
 
 exports = module.exports = function (io) {
   io.sockets.on('connection', function (socket) {
@@ -21,8 +18,6 @@ exports = module.exports = function (io) {
     // ==========================================================
     // Set new customer in costomer database
     // ==========================================================
-
-
 
     socket.on('setNewCustomer', function (customer) {
       console.log('fired')
@@ -38,7 +33,6 @@ exports = module.exports = function (io) {
     // Sync customers between front and backend
     // ==========================================================
 
-
     socket.on('refreshAllCustomers', function (socket) {
       console.log('refreshAllCustomers recieved')
       db.CustomerDB.find({})
@@ -52,21 +46,22 @@ exports = module.exports = function (io) {
     // Find a speciffic customer in Database
     // ==========================================================
 
-
     socket.on('findCustomer', function (customer) {
       console.log(customer)
       db.CustomerDB.find({
           $or: [{
-            preName: {
-              $regex: customer,
-              $options: 'i'
+              preName: {
+                $regex: customer,
+                $options: 'i'
+              }
+            },
+            {
+              surName: {
+                $regex: customer,
+                $options: 'i'
+              }
             }
-          }, {
-            surName: {
-              $regex: customer,
-              $options: 'i'
-            }
-          }]
+          ]
         })
         .then(customer => {
           console.log(customer)
@@ -75,11 +70,9 @@ exports = module.exports = function (io) {
         .catch(error => console.log('could not finde Customer :', error))
     })
 
-
     // ==========================================================
     // Delete a Customer in the Database
     // ==========================================================
-
 
     socket.on('deleteCustomer', function (customer) {
       console.log('to delete: ', customer)
@@ -97,31 +90,36 @@ exports = module.exports = function (io) {
     // Create a new course
     // ==========================================================
 
-
     socket.on('setNewCourse', function (course) {
       console.log('New Course recieved')
 
+      if ('_id' in course) {
+        db.CoursesDB.findByIdAndUpdate(course._id, course).then(courses => {
+          console.log(courses)
+          io.sockets.emit('setNewCourse_res', courses)
+        }).catch(err => console.log(err))
+      } else {
 
+        db.CoursesDB.create(course)
+          .then(CoursesDB => {
+            console.log(CoursesDB)
+            io.sockets.emit('setNewCourse_res', CoursesDB)
+          })
+          .catch(error => console.log(error))
 
-      db.CoursesDB.create(course)
-        .then(CoursesDB => {
-          console.log(CoursesDB)
-          io.sockets.emit('setNewCourse_res', CoursesDB)
-        })
-        .catch(error => console.log(error))
-
-      db.CoursesDB.findAndModify({
-          query: {},
-          sort: {
-            'created_at': 1
-          },
-          update: {
+        db.CoursesDB.findOneAndUpdate({}, {
             $inc: {
               CourseNumber: 1
             }
-          }
-        })
-        .then(courseNo => console.log('updated :', courseNo))
+          }, {
+            new: true,
+            sort: {
+              _id: -1
+            }
+          })
+          .then(courseNo => console.log('updated :', courseNo))
+          .catch(err => console.log(err))
+      }
     })
 
     // ==========================================================
@@ -132,7 +130,6 @@ exports = module.exports = function (io) {
       console.log(course)
       db.CoursesDB.find({})
         .then(course => {
-          console.log(course)
           io.sockets.emit('findCourses_res', course)
         })
         .catch(error => console.log('could not find Course :', error))
@@ -142,12 +139,36 @@ exports = module.exports = function (io) {
       console.log('refreshing courses recieved: ')
       db.CoursesDB.find({})
         .then(courses => {
-          console.log(courses)
           io.sockets.emit('refreshAllCourses_res', courses)
-        }).
-      catch(error => console.log('Could not find Courses :', error))
+        })
+        .catch(error => console.log('Could not find Courses :', error))
     })
 
+    // ==========================================================
+    // Delete a course
+    // ==========================================================
 
+    socket.on('deleteCourse', function (id) {
+      db.CoursesDB.findByIdAndDelete(id)
+        .then(courses => {
+          io.sockets.emit('deleteCourses_res', courses)
+        })
+        .catch(error => console.log('Could not find Courses :', error))
+    })
+
+    // ==========================================================
+    // Edit a course
+    // ==========================================================
+
+    socket.on('editCourse', function (id) {
+      console.log('id: ', id)
+      db.CoursesDB.findById(id)
+        .then(courses => {
+          console.log(courses)
+          io.sockets.emit('editCourse_res', courses)
+        })
+        .catch(error => console.log('Could not find Courses :', error))
+    })
   })
+
 }
