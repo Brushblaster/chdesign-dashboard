@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+
 mongoose.Promise = global.Promise
 const CustomerModel = require('./models/customers')
 const CoursesModel = require('./models/courses')
@@ -29,6 +30,9 @@ mongoose
     options
   )
   .catch(error => console.log('uri error: ' + uri, error))
+
+
+
 
 module.exports = {
   CustomerDB: CustomerModel,

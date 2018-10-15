@@ -26,6 +26,7 @@ module.exports = {
     'vue/max-attributes-per-line': 0,
     'vue/html-self-closing': 0,
     'vue/order-in-components': 0,
+    'vue/no-unused-vars': 0,
     'prettier/prettier': 0
   }
 }

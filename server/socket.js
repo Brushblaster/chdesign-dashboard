@@ -100,12 +100,28 @@ exports = module.exports = function (io) {
 
     socket.on('setNewCourse', function (course) {
       console.log('New Course recieved')
+
+
+
       db.CoursesDB.create(course)
         .then(CoursesDB => {
           console.log(CoursesDB)
           io.sockets.emit('setNewCourse_res', CoursesDB)
         })
         .catch(error => console.log(error))
+
+      db.CoursesDB.findAndModify({
+          query: {},
+          sort: {
+            'created_at': 1
+          },
+          update: {
+            $inc: {
+              CourseNumber: 1
+            }
+          }
+        })
+        .then(courseNo => console.log('updated :', courseNo))
     })
 
     // ==========================================================
@@ -120,6 +136,16 @@ exports = module.exports = function (io) {
           io.sockets.emit('findCourses_res', course)
         })
         .catch(error => console.log('could not find Course :', error))
+    })
+
+    socket.on('refreshAllCourses', function () {
+      console.log('refreshing courses recieved: ')
+      db.CoursesDB.find({})
+        .then(courses => {
+          console.log(courses)
+          io.sockets.emit('refreshAllCourses_res', courses)
+        }).
+      catch(error => console.log('Could not find Courses :', error))
     })
 
 

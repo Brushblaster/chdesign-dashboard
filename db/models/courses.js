@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 const Schema = mongoose.Schema
 
+
+
+
 // Create customer database schema
 const CoursesSchema = new Schema({
   CourseName: {
@@ -10,7 +13,8 @@ const CoursesSchema = new Schema({
   },
   CourseNumber: {
     type: Number,
-    required: [true, 'a number for this course is required']
+    required: [true, 'CourseNumber has to be delivered'],
+    default: 1
   },
   StartDate: {
     type: Date,
@@ -28,20 +32,25 @@ const CoursesSchema = new Schema({
     type: String,
     required: [true, 'Endingtime is required']
   },
-  Location: {
-    Street: {
-      type: String
-    },
-    StreetNo: {
-      type: Number
-    },
-    ZipCode: {
-      type: Number
-    },
-    City: {
-      type: String
-    }
+  Street: {
+    type: String
+  },
+  StreetNo: {
+    type: Number
+  },
+  ZipCode: {
+    type: Number
+  },
+  City: {
+    type: String
 
+
+  },
+  AttendeesFree: {
+    type: Number,
+  },
+  AttendeesOccupied: {
+    type: Number
   },
   TimeStamp: {
     type: Date,
@@ -50,6 +59,9 @@ const CoursesSchema = new Schema({
 
 })
 
+
 const CoursesModel = mongoose.model('CoursesModel', CoursesSchema)
+
+
 
 module.exports = CoursesModel

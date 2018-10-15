@@ -14,10 +14,10 @@
                     <v-icon>list</v-icon>
                     <v-icon>close</v-icon>
                   </v-btn>
-                  <v-btn fab dark small color="red">
+                  <v-btn @click="refresh" fab dark small color="red">
                     <v-icon>cached</v-icon>
                   </v-btn>
-                  <v-btn fab dark small color="indigo">
+                  <v-btn @click="NewForm = !NewForm" fab dark small color="indigo">
                     <v-icon>add</v-icon>
                   </v-btn>
                   <v-btn fab dark small color="green">
@@ -32,38 +32,44 @@
           </v-card>
         </v-flex>
         <v-flex xs11>
-          <v-data-table :headers="headers" :items="customers" hide-actions :loading="loading" class="elevation-1">
+          <v-data-table :headers="headers" :items="courses" hide-actions :loading="loading" class="elevation-1">
             <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
             <template slot="items" slot-scope="props">
-              <td class="text-xs-left">{{ props.item.preName }}</td>
-              <td class="text-xs-left">{{ props.item.surName }}</td>
-              <td class="text-xs-left">{{ props.item.street }}</td>
-              <td class="text-xs-left">{{ props.item.streetNr }}</td>
-              <td class="text-xs-left">{{ props.item.zipCode }}</td>
-              <td class="text-xs-left">{{ props.item.city }}</td>
-              <td class="text-xs-left">{{ props.item.bithday }}</td>
+              <td class="text-xs-left">{{ props.item.CourseNumber }}</td>
+              <td class="text-xs-left">{{ props.item.CourseName }}</td>
+              <td class="text-xs-left">{{ props.item.StartDate }}</td>
+              <td class="text-xs-left">{{ props.item.EndDate }}</td>
+              <td class="text-xs-left">{{ props.item.StartTime }}</td>
+              <td class="text-xs-left">{{ props.item.EndTime }}</td>
+              <td class="text-xs-left">{{ props.item.City }}</td>
             </template>
           </v-data-table>
         </v-flex>
       </v-layout>
     </v-container>
+    <NewCourseForm @submit="SubmitCourse" :show="NewForm" />
   </v-content>
 </template>
 
 <script>
+import NewCourseForm from '@/components/NewCourseForm'
 export default {
+	components: {
+		NewCourseForm
+	},
 	data: () => ({
 		fab: null,
+		NewForm: false,
 		tuggle: false,
+		loading: false,
 		headers: [
-			{ text: 'Kursnummer', align: 'left', value: 'preName' },
-			{ text: 'Kursname', align: 'left', value: 'preName' },
-			{ text: 'End Datum', value: 'surName' },
-			{ text: 'Start Datum', align: 'left', value: 'preName' },
-			{ text: 'End Datum', value: 'surName' },
-			{ text: 'Ort', value: 'street' },
-			{ text: 'Start Zeit', value: 'streetNr' },
-			{ text: 'End Zeit', value: 'zipCode' },
+			{ text: 'Kursnummer', align: 'left', value: 'CourseNumber' },
+			{ text: 'Kursname', align: 'left', value: 'CourseName' },
+			{ text: 'Start Datum', align: 'left', value: 'StartDate' },
+			{ text: 'End Datum', value: 'EndDate' },
+			{ text: 'Start Zeit', value: 'StartTime' },
+			{ text: 'End Zeit', value: 'EndTime' },
+			{ text: 'Ort', value: 'Location' },
 			{ text: 'Anzahl Teilnehmer', value: 'city' },
 			{ text: 'Freie Plätze', value: 'birthday' }
 		],
@@ -72,12 +78,25 @@ export default {
 	computed: {},
 	sockets: {
 		setNewCourse_res(courses) {
-			console.log(courses)
-			this.loading = false
-			this.courses = courses
+			this.refresh()
 		},
 		findCourses_res() {
 			// this.refreshingData()
+		},
+		refreshAllCourses_res(courses) {
+			console.log(courses)
+			this.loading = false
+			this.courses = courses
+		}
+	},
+	methods: {
+		refresh() {
+			this.loading = true
+			this.$socket.emit('refreshAllCourses')
+		},
+		SubmitCourse(course) {
+			console.log('rec')
+			this.$socket.emit('setNewCourse', course)
 		}
 	}
 }
@@ -90,5 +109,9 @@ export default {
 
 #create .v-btn--floating {
 	position: relative;
+}
+
+.v-overlay:before {
+	backdrop-filter: blur(3px);
 }
 </style>
