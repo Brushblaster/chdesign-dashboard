@@ -1,7 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const consola = require('consola')
-const { Nuxt, Builder } = require('nuxt-edge')
+const cors = require('cors')
+const {
+  Nuxt,
+  Builder
+} = require('nuxt-edge')
 const app = express()
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
@@ -13,6 +17,8 @@ const io = require('socket.io')(server, {
 require('./socket')(io)
 
 app.set('port', port)
+
+app.use(cors())
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
