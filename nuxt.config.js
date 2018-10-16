@@ -86,7 +86,7 @@ module.exports = {
    ** Axios module configuration
    */
   axios: {
-    baseURL: `${
+    /* baseURL: `${
 			process.env.NODE_ENV === 'production'
 				? `https://${process.env.PROD_DOMAIN}`
         : `http://${process.env.DEVE_DOMAIN}:${process.env.PORT}`
@@ -94,7 +94,7 @@ module.exports = {
 
     redirectError: {
       // 401: '/login'
-    } // See https://github.com/nuxt-community/axios-module#options
+    }  */ // See https://github.com/nuxt-community/axios-module#options
   },
 
   auth: {

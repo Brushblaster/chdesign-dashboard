@@ -13,11 +13,7 @@ app.get('/', (req, res) => {
 app.get('/live/courses', (req, res, next) => {
   db.CoursesDB.find({})
     .then(courses => {
-      if (courses) {
-        res.json(courses)
-      } else {
-        res.sendStatus(405)
-      }
+      res.json(courses)
     })
     .catch(err => console.log(err))
   next()
