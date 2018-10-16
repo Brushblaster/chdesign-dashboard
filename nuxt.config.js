@@ -86,7 +86,15 @@ module.exports = {
    ** Axios module configuration
    */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: `${
+			process.env.NODE_ENV === 'production'
+				? `https://${process.env.PROD_DOMAIN}`
+        : `http://${process.env.DEVE_DOMAIN}:${process.env.PORT}`
+		}/api/`,
+
+    redirectError: {
+      // 401: '/login'
+    } // See https://github.com/nuxt-community/axios-module#options
   },
 
   auth: {
@@ -144,5 +152,9 @@ module.exports = {
         })
       }
     }
-  }
+  },
+  serverMiddleware: [
+    // API middleware
+    '@/server/api/index.js'
+  ]
 }
