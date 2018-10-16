@@ -11,12 +11,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/live/courses', (req, res, next) => {
-  db.CoursesDB.find({})
-    .then(courses => {
-      res.json(courses)
-    })
-    .catch(err => console.log(err))
-  next()
+  db.CoursesDB.find({}, (err, courses) => {
+    res.json(courses)
+    if (err) {
+      console.log(err)
+    }
+  })
+
 })
 
 module.exports = {
