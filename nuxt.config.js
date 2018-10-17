@@ -1,7 +1,6 @@
 require('dotenv').config()
 const pkg = require('./package')
 
-
 module.exports = {
   mode: 'universal',
 
@@ -10,7 +9,8 @@ module.exports = {
    */
   head: {
     title: pkg.name,
-    meta: [{
+    meta: [
+      {
         charset: 'utf-8'
       },
       {
@@ -23,24 +23,28 @@ module.exports = {
         content: pkg.description
       }
     ],
-    link: [{
+    link: [
+      {
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico'
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Roboto:100,100i,300,400,500,700|Material+Icons'
+        href:
+          'https://fonts.googleapis.com/css?family=Roboto:100,100i,300,400,500,700|Material+Icons'
       },
       {
         rel: 'stylesheet',
         href: 'https://use.fontawesome.com/releases/v5.0.10/css/all.css',
-        integrity: 'sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg',
+        integrity:
+          'sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg',
         crossorigin: 'anonymous'
       },
       {
         rel: 'stylesheet',
-        href: 'https://cdn.materialdesignicons.com/2.2.43/css/materialdesignicons.min.css'
+        href:
+          'https://cdn.materialdesignicons.com/2.2.43/css/materialdesignicons.min.css'
       }
     ]
   },
@@ -61,7 +65,8 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{
+  plugins: [
+    {
       src: '@/plugins/vuetify'
     },
     {
@@ -80,8 +85,29 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/dotenv',
-    '@nuxtjs/component-cache'
+    '@nuxtjs/component-cache',
+    '@nuxtjs/pwa'
   ],
+
+  manifest: {
+    name: 'CH-Design-Dashboard',
+    short_name: 'CH-Dashboard',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#fff',
+    description: 'Dashboard for managing all topics in CH-Design.',
+    icons: [
+      {
+        src: '@/static/v.png',
+        sizes: '120x120',
+        type: 'image/png'
+      }
+    ]
+  },
+
+  icon: {
+    iconSrc: '@/staic/v.png'
+  },
   /*
    ** Axios module configuration
    */
@@ -94,7 +120,8 @@ module.exports = {
 
     redirectError: {
       // 401: '/login'
-    }  */ // See https://github.com/nuxt-community/axios-module#options
+    }  */
+    // See https://github.com/nuxt-community/axios-module#options
   },
 
   auth: {
@@ -109,8 +136,10 @@ module.exports = {
       auth0: {
         client_id: process.env.AUTH0_CLIENT_ID,
         domain: process.env.AUTH0_CLIENT_DOMAIN,
-        redirect_uri: process.env.NODE_ENV === 'production' ?
-          `http://app.${process.env.PROD_DOMAIN}` : `http://${process.env.HOST}:${process.env.PORT}/`
+        redirect_uri:
+          process.env.NODE_ENV === 'production'
+            ? `http://app.${process.env.PROD_DOMAIN}`
+            : `http://${process.env.HOST}:${process.env.PORT}/`
       }
     }
   },
