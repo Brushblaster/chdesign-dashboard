@@ -6,11 +6,15 @@
       </v-icon>
     </v-btn> -->
     <v-card-text>
-      <v-autocomplete v-model="model" hint="Kunden suchen" :items="autocomplete" label="suche" persistent-hint prepend-icon="mdi-magnify">
-      </v-autocomplete>
+    <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Suche"
+        single-line
+        hide-details
+      ></v-text-field>      
     </v-card-text>
-
-    <v-data-table :pagination.sync="pagination" :total-items="totalCustomers" :headers="headers" :items="customers" :loading="loading" class="elevation-8" item-key="surName">
+    <v-data-table :search="search" :pagination.sync="pagination" :total-items="totalCustomers" :headers="headers" :items="customers" :loading="loading" class="elevation-8" item-key="surName">
       <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded">
@@ -23,6 +27,9 @@
 
         </tr>
       </template>
+      <v-alert slot="no-results" :value="true" color="error" icon="warning">
+        Your search for "{{ search }}" found no results.
+      </v-alert>
       <template slot="expand" slot-scope="props">
         <v-card flat>
           <v-layout row wrap>
@@ -63,7 +70,8 @@ export default {
 		pagination: {},
 		totalCustomers: 0,
 		autocomplete: [],
-		model: null
+		model: null,
+    search: '',
 	}),
 	watch: {
 		pagination: {
