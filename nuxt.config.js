@@ -20,6 +20,10 @@ module.exports = {
         hid: 'description',
         name: 'description',
         content: pkg.description
+      },
+      {
+        name: 'theme-color',
+        content: '#01888b'
       }
     ],
     link: [{
