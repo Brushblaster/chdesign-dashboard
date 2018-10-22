@@ -51,6 +51,8 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - persist_to_workspace:
+          root: .
 
   deploy:
     docker: # run the steps with Docker
