@@ -13,17 +13,6 @@ const options = {
   pass: process.env.MONGODB_PASS
 }
 
-/* let buildUpUri =
-  'mongodb://' +
-  process.env.MONGODB_USER +
-  ':' +
-  process.env.MONGODB_PASS +
-  '@' +
-  process.env.MONGODB_ADDRESS_PROD +
-  '/chdesign?authSource=admin' */
-
-// let uri = buildUpUri
-
 mongoose
   .connect(
     `mongodb://${process.env.MONGODB_ADDRESS_PROD}:27017/chdesign?authSource=admin`,

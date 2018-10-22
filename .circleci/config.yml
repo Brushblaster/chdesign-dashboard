@@ -51,6 +51,8 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - ? persist_to_workspace
+
   deploy:
     docker: # run the steps with Docker
       - image: circleci/node:latest
@@ -70,6 +72,8 @@ workflows:
 
   build-ch-dashboard:
     jobs:
+      - attach_workspace:
+          at: /tmp
       - build:
           context: CH-Design
       - deploy:
