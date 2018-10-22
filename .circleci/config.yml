@@ -51,26 +51,20 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
-      - run:
-          name: Docker Image
-          command: docker save -o ./ docker-image
       - persist_to_workspace:
           root: .
-          paths: ./var
+          paths: ./
 
   deploy:
     docker: # run the steps with Docker
       - image: circleci/node:latest
     working_directory: ~/tmp
     steps:
-      - checkout
+      #- checkout
       - attach_workspace:
           at: ~/tmp
       - setup_remote_docker:
           docker_layer_caching: true
-      - run:
-        name: restore docker image
-        command: docker load -i ./docker-image
       - run:
           name: Define script rights
           command: chmod u+x ./docker_push.sh
