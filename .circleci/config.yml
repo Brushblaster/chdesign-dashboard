@@ -61,14 +61,12 @@ jobs:
           name: Deploy to Docker
           command: ./docker_push.sh
 
-
 workflows:
   version: 2
 
-  Build-CH-Dashboard
+  Build-CH-Dashboard:
     jobs:
       - build
       - deploy:
           requires:
             - build
-
