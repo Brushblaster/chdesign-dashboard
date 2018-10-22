@@ -51,9 +51,12 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - run:
+          name: Docker Image
+          command: docker image ls
       - persist_to_workspace:
           root: .
-          paths: ./
+          paths: ./var
 
   deploy:
     docker: # run the steps with Docker
