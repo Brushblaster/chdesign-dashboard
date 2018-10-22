@@ -46,6 +46,9 @@ jobs:
       - run:
           name: Run Docker Image
           command: docker run -d -p 127.0.0.1:80:3000 brushblaster/chdesign-dashboard:v0.0.1
+          - run:
+          name: Save Docker Image
+          command: docker save -o ./ brushblaster/chdesign-dashboard:v0.0.1
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
@@ -53,18 +56,21 @@ jobs:
             - ~/.cache/yarn
       - persist_to_workspace:
           root: .
-          paths: ./
+          paths: ./"brushblaster/chdesign-dashboard:v0.0.1.tar"
 
   deploy:
     docker: # run the steps with Docker
       - image: circleci/node:latest
     working_directory: ~/tmp
     steps:
-      #- checkout
+      - checkout
       - attach_workspace:
           at: ~/tmp
       - setup_remote_docker:
           docker_layer_caching: true
+      -run:
+          name: Load Docker Image
+          command: docker load -q -i "brushblaster/chdesign-dashboard:v0.0.1.tar"
       - run:
           name: Define script rights
           command: chmod u+x ./docker_push.sh
