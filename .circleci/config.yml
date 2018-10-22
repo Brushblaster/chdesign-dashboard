@@ -57,7 +57,7 @@ jobs:
       - image: circleci/node:latest
     working_directory: ~/tmp
     steps:
-      #- checkout
+      - checkout
       - attach_workspace:
           at: ~/tmp
       - setup_remote_docker:
