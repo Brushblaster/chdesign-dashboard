@@ -42,7 +42,6 @@ jobs:
       - run:
           name: Run Docker Image
           command: docker run -d -p 127.0.0.1:80:3000 brushblaster/chdesign-dashboard:v0.0.1
-
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
@@ -64,7 +63,7 @@ jobs:
 workflows:
   version: 2
 
-  Build-CH-Dashboard:
+  build-ch-dashboard:
     jobs:
       - build
       - deploy:
