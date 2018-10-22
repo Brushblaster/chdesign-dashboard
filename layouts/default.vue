@@ -1,6 +1,6 @@
 <template>
   <v-app id="app" light>
-    <v-navigation-drawer class="font-weight-light" width="250" dark v-model="drawer" app clipped :temporary="!this.$auth.loggedIn" color="primary" disable-resize-watcher>
+    <v-navigation-drawer class="elevation-8 font-weight-light" width="250" dark v-model="drawer" app clipped :temporary="!this.$auth.loggedIn" color="primary" disable-resize-watcher>
       <v-toolbar class="white--text" dark color="primary" height="50px">
         <v-spacer />
         <v-btn icon @click="drawer = !drawer">
@@ -18,7 +18,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar dark app scroll-off-screen :scroll-threshold="treshold" color="primary" height="50">
+    <v-toolbar class="elevation-8" dark app scroll-off-screen :scroll-threshold="treshold" color="primary" height="50">
       <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title to="'/'" style="cursor: pointer" v-text="title">
 
@@ -46,7 +46,7 @@
     <!-- </v-container> -->
     <!-- </v-content> -->
     <v-footer fixed app>
-      <span class="pl-2">&copy; 2018 / Denis Käch</span>
+      <span class="elevation-8 pl-2">&copy; 2018 / Denis Käch</span>
     </v-footer>
   </v-app>
 </template>
