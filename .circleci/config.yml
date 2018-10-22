@@ -11,6 +11,7 @@ jobs:
   build:
     docker: # run the steps with Docker
       - image: circleci/node:latest
+    <<: *defaults
     steps:
       - checkout
       - setup_remote_docker:
@@ -51,11 +52,13 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
-      - ? persist_to_workspace
+      - persist_to_workspace:
+          root: /
 
   deploy:
     docker: # run the steps with Docker
       - image: circleci/node:latest
+    <<: *defaults
     steps:
       #- checkout
       - setup_remote_docker:
