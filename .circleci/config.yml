@@ -53,7 +53,7 @@ jobs:
             - ~/.cache/yarn
       - persist_to_workspace:
           root: .
-          paths: /tmp
+          paths: tmp
 
   deploy:
     docker: # run the steps with Docker
