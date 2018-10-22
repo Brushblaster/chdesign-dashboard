@@ -8,11 +8,11 @@ jobs:
   build:
     docker: # run the steps with Docker
       - image: circleci/node:latest
-    working_directory: /tmp
+    working_directory: ~/tmp
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp
+          at: ~/tmp
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
@@ -55,11 +55,11 @@ jobs:
   deploy:
     docker: # run the steps with Docker
       - image: circleci/node:latest
-    working_directory: /tmp
+    working_directory: ~/tmp
     steps:
       #- checkout
       - attach_workspace:
-          at: /tmp
+          at: ~/tmp
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
@@ -74,8 +74,6 @@ workflows:
 
   build-ch-dashboard:
     jobs:
-      - attach_workspace:
-          at: /tmp
       - build:
           context: CH-Design
       - deploy:
