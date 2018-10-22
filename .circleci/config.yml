@@ -65,7 +65,9 @@ workflows:
 
   build-ch-dashboard:
     jobs:
-      - build
+      - build:
+          context: CH-Design
       - deploy:
+          context: CH-Design
           requires:
             - build
