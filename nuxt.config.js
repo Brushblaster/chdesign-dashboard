@@ -98,7 +98,7 @@ module.exports = {
   },
 
   icon: {
-    iconSrc: '@/static/v.png'
+    iconSrc: './static/v.png'
   },
   /*
    ** Axios module configuration
