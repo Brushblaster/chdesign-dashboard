@@ -94,7 +94,7 @@ module.exports = {
     display: 'standalone',
     background_color: '#01888b',
     description: 'Dashboard for managing all topics in CH-Design.',
-
+    icons: []
   },
 
   icon: {
