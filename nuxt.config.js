@@ -72,7 +72,10 @@ module.exports = {
     },
     {
       src: '@/plugins/lodash'
-    }
+    }/* ,
+    {
+      src: '@/plugins/axios'
+    } */
   ],
 
   /*
@@ -104,16 +107,12 @@ module.exports = {
    ** Axios module configuration
    */
   axios: {
-    /* baseURL: `${
-			process.env.NODE_ENV === 'production'
-				? `https://${process.env.PROD_DOMAIN}`
-        : `http://${process.env.DEVE_DOMAIN}:${process.env.PORT}`
-		}/api/`,
-
-    redirectError: {
-      // 401: '/login'
-    }  */
-    // See https://github.com/nuxt-community/axios-module#options
+    // credentials: true,
+/*     headers: {
+      'GData-Version': '3.0',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS'
+    } */
   },
 
   auth: {

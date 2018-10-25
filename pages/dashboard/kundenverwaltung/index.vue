@@ -31,6 +31,14 @@
             <CustomerList
             />
           </v-card>
+
+          <v-card>
+            <v-card-title class="headline font-weight-thin">
+               Kunden Google
+            </v-card-title>
+            <GoogleContacts
+            />
+          </v-card>
         </v-flex>
       </v-layout>
     </v-container>
@@ -41,12 +49,14 @@
 import NewCustomerForm from '@/components/NewCustomerForm'
 import CustomerList from '@/components/CustomerList'
 import EditCustomerForm from '@/components/EditCustomerForm'
+import GoogleContacts from '@/components/GoogleContacts'
 
 export default {
   components: {
     NewCustomerForm,
     CustomerList,
-    EditCustomerForm
+    EditCustomerForm,
+    GoogleContacts
   },
   data: () => ({
     dialog: false
