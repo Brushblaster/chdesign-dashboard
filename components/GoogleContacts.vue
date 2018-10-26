@@ -40,7 +40,7 @@
         </v-card>
       </template>
       <template slot="pageText" slot-scope="props">
-        Einträge {{ props.pageStart }} - {{ props.pageStop }} von {{ props.itemsLength }}
+        Eintrï¿½ge {{ props.pageStart }} - {{ props.pageStop }} von {{ props.itemsLength }}
       </template>
     </v-data-table>
     {{ Toki }}
@@ -98,7 +98,7 @@ export default {
 		},
 		getGoogleContacts() {
       console.log('Hi')
-      this.Toki = localStorage.getItem('auth._token.auth0')
+      //this.Toki = localStorage.getItem('auth._token.auth0')
 			// this.$axios.setToken(false)
 			/* this.$axios.$get(
 					`https://www.google.com/m8/feeds/contacts/default/full`, {
@@ -109,7 +109,7 @@ export default {
 				.then(res => console.log(res))
         .catch(err => console.log('error recieved: ', err)) */
 			//this.$axios.setToken(localStorage.getItem('auth._token.auth0'))
-  */    var options = { method: 'POST',
+ /*    var options = { method: 'POST',
   url: 'https://ticoa.auth0.com/oauth/token',
   headers: { 'content-type': 'application/json' },
   body: '{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}' };
