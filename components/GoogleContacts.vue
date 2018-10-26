@@ -40,7 +40,7 @@
         </v-card>
       </template>
       <template slot="pageText" slot-scope="props">
-        Eintr√§ge {{ props.pageStart }} - {{ props.pageStop }} von {{ props.itemsLength }}
+        Eintr‰ge {{ props.pageStart }} - {{ props.pageStop }} von {{ props.itemsLength }}
       </template>
     </v-data-table>
     {{ Toki }}
@@ -109,18 +109,20 @@ export default {
 				.then(res => console.log(res))
         .catch(err => console.log('error recieved: ', err)) */
 			//this.$axios.setToken(localStorage.getItem('auth._token.auth0'))
-
+  */    var options = { method: 'POST',
+  url: 'https://ticoa.auth0.com/oauth/token',
+  headers: { 'content-type': 'application/json' },
+  body: '{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}' };
+*/
+	  
+	  
       fetch('https://ticoa.auth0.com/oauth/token', {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'content-type': 'application/json' },
-        body:
-          { grant_type: 'client_credentials',
-            client_id: 'fvEkU1m_vk8VZGglspxVVzmPV_ViWhhA',
-            client_secret: 'YhinT9a5KGGHzEyq9n_MrQi_',
-            audience: 'https://www.google.com/m8/feeds/contacts/'
-          },
-        json: true }
+        body: '{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}' };
+
+
       ).then(res => console.log(res))
         .catch(err => console.log(err))
 
