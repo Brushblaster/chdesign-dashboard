@@ -120,7 +120,7 @@ export default {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'content-type': 'application/json' },
-        body: '{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}' };
+        body: JSON.stringify('{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}')
 
 
       ).then(res => console.log(res))
