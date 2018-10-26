@@ -98,7 +98,7 @@ export default {
 		},
 		getGoogleContacts() {
       console.log('Hi')
-      //this.Toki = localStorage.getItem('auth._token.auth0')
+      this.Toki = localStorage.getItem('auth._token.auth0')
 			// this.$axios.setToken(false)
 			/* this.$axios.$get(
 					`https://www.google.com/m8/feeds/contacts/default/full`, {
@@ -114,32 +114,33 @@ export default {
   headers: { 'content-type': 'application/json' },
   body: '{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}' };
 */
-	  
-	  
+
+
       fetch('https://ticoa.auth0.com/oauth/token', {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify('{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}')
-
-
+        credentials: 'include',
+        headers: {
+          'content-type': 'application/json' },
+        body: '{"client_id":"gBHKCe4rh5VA3nKrbVydPrvGI7NsM8q5","client_secret":"YhPTD_M1SKI1e5oFRLXbqX9pPS-tfpxby31RqcqI6x1TWiwLUXy0Xx9iJxzdVJv6","audience":"https://ticoa.auth0.com/api/v2/","grant_type":"client_credentials"}'
+      }
       ).then(res => console.log(res))
         .catch(err => console.log(err))
 
 
       const ApiHeaders = new Headers({
-        'Authorization': localStorage.getItem('auth._token.auth0'),
+        'Authorization': 'BaerereyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlF6STFOMFZFUmpjeFFVSkVSVUZCTmpNeU1rSXhPRGxDUXpFeE9UUXdOVFZETVRGRk5rVkZNZyJ9.eyJpc3MiOiJodHRwczovL3RpY29hLmF1dGgwLmNvbS8iLCJzdWIiOiJnQkhLQ2U0cmg1VkEzbktyYlZ5ZFBydkdJN05zTThxNUBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly90aWNvYS5hdXRoMC5jb20vYXBpL3YyLyIsImlhdCI6MTU0MDUzMjc5MywiZXhwIjoxNTQwNjE5MTkzLCJhenAiOiJnQkhLQ2U0cmg1VkEzbktyYlZ5ZFBydkdJN05zTThxNSIsInNjb3BlIjoicmVhZDpjbGllbnRfZ3JhbnRzIHJlYWQ6dXNlcnMgcmVhZDp1c2Vyc19hcHBfbWV0YWRhdGEgcmVhZDpjb25uZWN0aW9ucyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.Bn4Okl1V65pfZhCDCizkqwQtX6h1cjmQ-8RVbIHBjSs3lhxh47Sj3aoVFWgxAInEfTrcd7Qt61NVSraHYMVk7YI1LyvPE2fykDrZf0xm5cWBmGJ0GUjbMwGjDyqXVLXXkBe2at62DmKXVXxqpW3xDw5iaOBicohDyIA-rlwnjDy5CyWbSUN7r6UVySiolAtBE5kAa8gLnAflCWlQ9jH2OHZsNz-bhwQ7vTvYm7nLJ_1nFaTDHMQfZjQPG2o7ef8lNCThgNIlir6MzlHh0KwH8o5ErC2uC2jS4wBuxPcp-mC8gGOiicXySjdlVe917fAz40AF6Z-lAs3lGp2SEvjDLg',
         'GData-Version': '3.0'
       })
 
 			const init = {
 				method: 'GET',
 				mode: 'no-cors',
-        credentials: 'include',
+        //credentials: 'include',
         headers: ApiHeaders
 			}
 
-			//const apiRequest = new Request(url, init)
+			//nst apiRequest = new Request(url, init)
 			const url = 'https://www.google.com/m8/feeds/contacts/default/full'
 
 
@@ -148,7 +149,8 @@ export default {
 
 			fetch(ApiRequest)
 				.then(res => console.log(res))
-				.catch(err => console.log(err))
+        .catch(err => console.log(err))
+
 		}
 	},
 	sockets: {
